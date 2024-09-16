@@ -1,5 +1,5 @@
-from __init__ import CONN, CURSOR
-from department import Department
+from lib. __init__ import CONN, CURSOR
+from lib. department import Department
 
 import ipdb
 

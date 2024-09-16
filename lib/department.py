@@ -1,5 +1,4 @@
-from __init__ import CURSOR, CONN
-
+from lib.__init__ import CURSOR, CONN
 
 class Department:
 
@@ -72,3 +71,45 @@ class Department:
 
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
+
+    @classmethod
+    def find_by_id(cls, department_id):
+        """Find a department by its ID."""
+        sql = """
+            SELECT * FROM departments
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (department_id,))
+        row = CURSOR.fetchone()
+        if row:
+            return cls.instance_from_db(row)
+        return None
+
+    @classmethod
+    def find_by_name(cls, name):
+        """Find a department by its name."""
+        sql = """
+            SELECT * FROM departments
+            WHERE name = ?
+        """
+        CURSOR.execute(sql, (name,))
+        row = CURSOR.fetchone()
+        if row:
+            return cls.instance_from_db(row)
+        return None
+
+    @classmethod
+    def instance_from_db(cls, row):
+        """Create a Department instance from a database row."""
+        id, name, location = row
+        return cls(name, location, id)
+
+    @classmethod
+    def get_all(cls):
+        """Retrieve all departments from the database."""
+        sql = """
+            SELECT * FROM departments
+        """
+        CURSOR.execute(sql)
+        rows = CURSOR.fetchall()
+        return [cls.instance_from_db(row) for row in rows]
